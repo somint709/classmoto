@@ -1,1 +1,1 @@
-# classmoto
+# classmotto
