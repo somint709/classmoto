@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>우리 반 급훈 공모</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f3;
+      --bg-success: #eaf3de;
+      --bg-danger: #fcebeb;
+      --text-primary: #1a1a18;
+      --text-secondary: #6b6b67;
+      --text-tertiary: #a0a09b;
+      --text-success: #3b6d11;
+      --text-danger: #a32d2d;
+      --border-tertiary: rgba(0,0,0,0.12);
+      --border-secondary: rgba(0,0,0,0.22);
+      --border-primary: rgba(0,0,0,0.38);
+      --border-success: #639922;
+      --border-danger: #e24b4a;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #1e1e1c;
+        --bg-secondary: #2a2a28;
+        --bg-success: #1a2e0a;
+        --bg-danger: #2e1010;
+        --text-primary: #f0ede8;
+        --text-secondary: #a8a8a2;
+        --text-tertiary: #6e6e6a;
+        --text-success: #97c459;
+        --text-danger: #f09595;
+        --border-tertiary: rgba(255,255,255,0.10);
+        --border-secondary: rgba(255,255,255,0.18);
+        --border-primary: rgba(255,255,255,0.32);
+        --border-success: #639922;
+        --border-danger: #e24b4a;
+      }
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-tertiary);
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-secondary);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .header h1 {
+      font-family: 'Gowun Batang', serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: var(--text-primary);
+    }
+
+    .header p {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .tab-bar {
+      display: flex;
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-tertiary);
+      border-radius: var(--radius-lg);
+      padding: 4px;
+      margin-bottom: 1.75rem;
+      gap: 4px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 9px 0;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .tab.active {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 0.5px solid var(--border-secondary);
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .card {
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-tertiary);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.6rem;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 15px;
+      padding: 10px 12px;
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    textarea:focus {
+      border-color: var(--border-primary);
+      background: var(--bg-primary);
+    }
+
+    textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+
+    .char-count {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: opacity 0.15s;
+    }
+
+    .submit-btn:hover { opacity: 0.82; }
+
+    .toast {
+      display: none;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 14px;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .toast.success {
+      background: var(--bg-success);
+      color: var(--text-success);
+      border: 0.5px solid var(--border-success);
+    }
+
+    .toast.error {
+      background: var(--bg-danger);
+      color: var(--text-danger);
+      border: 0.5px solid var(--border-danger);
+    }
+
+    /* Vote tab */
+    .vote-info-bar {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      padding: 10px 14px;
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-tertiary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .vote-remaining { font-weight: 500; color: var(--text-primary); }
+    .vote-remaining.empty { color: var(--text-danger); }
+
+    .motto-item {
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-tertiary);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.15s;
+    }
+
+    .motto-item:hover { border-color: var(--border-secondary); }
+
+    .motto-text-block { flex: 1; min-width: 0; }
+
+    .motto-text {
+      font-family: 'Gowun Batang', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .motto-reason {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    .motto-author {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+      padding: 2px 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      display: inline-block;
+      border: 0.5px solid var(--border-tertiary);
+    }
+
+    .vote-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .vote-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 0.5px solid var(--border-secondary);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .vote-btn:hover:not(:disabled) {
+      background: var(--bg-primary);
+      border-color: var(--border-primary);
+      transform: scale(1.08);
+    }
+
+    .vote-btn.voted {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-color: var(--text-primary);
+    }
+
+    .vote-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .vote-count {
+      font-size: 15px;
+      font-weight: 500;
+      min-width: 20px;
+      text-align: center;
+      color: var(--text-primary);
+    }
+
+    /* Result tab */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-tertiary);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .stat-num { font-size: 22px; font-weight: 500; line-height: 1; color: var(--text-primary); }
+    .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      padding-left: 2px;
+    }
+
+    .progress-bar-wrap {
+      height: 4px;
+      background: var(--bg-secondary);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .motto-number { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+
+    .rank-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 0.5px solid var(--border-tertiary);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rank-badge.top1 { background: #FAC775; border-color: #EF9F27; color: #412402; font-weight: 700; }
+    .rank-badge.top2 { background: #D3D1C7; border-color: #888780; color: #2C2C2A; }
+    .rank-badge.top3 { background: #F5C4B3; border-color: #D85A30; color: #4A1B0C; }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      border: 0.5px dashed var(--border-secondary);
+      border-radius: var(--radius-lg);
+    }
+
+    /* Admin */
+    .admin-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .teacher-status {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .teacher-status.on {
+      background: #eaf3de;
+      color: #3b6d11;
+      border: 0.5px solid #639922;
+    }
+
+    .teacher-status.off {
+      background: var(--bg-secondary);
+      color: var(--text-tertiary);
+      border: 0.5px solid var(--border-tertiary);
+    }
+
+    .admin-toggle {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .admin-panel {
+      display: none;
+      background: var(--bg-secondary);
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .admin-panel.show { display: block; }
+
+    .admin-panel h3 {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .pw-row { display: flex; gap: 8px; margin-bottom: 0.5rem; }
+    .pw-row input { flex: 1; }
+
+    .pw-btn {
+      padding: 10px 16px;
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .pw-btn:hover { opacity: 0.8; }
+
+    .admin-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.75rem; }
+
+    .admin-btn {
+      padding: 7px 14px;
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+    }
+
+    .admin-btn:hover { opacity: 0.8; }
+    .admin-btn.danger { color: var(--text-danger); border-color: var(--border-danger); }
+
+    @media (max-width: 480px) {
+      .header h1 { font-size: 22px; }
+      .tab { font-size: 12px; padding: 8px 0; }
+      .stats-row { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <div class="header">
+      <div class="header-badge">우리 반 급훈 공모</div>
+      <h1>급훈을 함께 만들어요</h1>
+      <p>익명으로 제안하고, 1인 2표로 투표해요</p>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab active" onclick="showTab('propose')">✏️ 급훈 제안</button>
+      <button class="tab" onclick="showTab('vote')">🗳️ 투표하기</button>
+      <button class="tab" onclick="showTab('result')">📊 결과 보기</button>
+    </div>
+
+    <!-- 제안 탭 -->
+    <div id="tab-propose" class="section active">
+      <div class="card">
+        <div class="card-label">제안자 이름</div>
+        <input type="text" id="name-input" maxlength="10" placeholder="본인 이름을 입력하세요 (선생님께만 공개)" />
+        <div class="hint">이름은 선생님 관리 화면에서만 표시되며, 학생들 화면에는 나타나지 않아요.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">급훈 문구</div>
+        <input type="text" id="motto-input" maxlength="30" placeholder="예) 실패를 두려워하지 않는 우리" oninput="updateCharCount(this,'motto-count',30)" />
+        <div class="char-count"><span id="motto-count">0</span>/30</div>
+      </div>
+      <div class="card">
+        <div class="card-label">추천 이유 <span style="font-size:11px;color:var(--text-tertiary);font-weight:400;">(선택)</span></div>
+        <textarea id="reason-input" maxlength="80" placeholder="이 급훈을 고른 이유를 간단히 써 주세요" oninput="updateCharCount(this,'reason-count',80)"></textarea>
+        <div class="char-count"><span id="reason-count">0</span>/80</div>
+      </div>
+      <button class="submit-btn" onclick="submitMotto()">익명으로 제안하기</button>
+      <div class="toast success" id="propose-toast">급훈이 익명으로 등록되었어요!</div>
+      <div class="toast error" id="propose-error">이름과 급훈 문구를 모두 입력해 주세요.</div>
+    </div>
+
+    <!-- 투표 탭 -->
+    <div id="tab-vote" class="section">
+      <div class="vote-info-bar">
+        <span>1인 2표까지 투표할 수 있어요</span>
+        <span>남은 투표: <span class="vote-remaining" id="vote-remaining">2표</span></span>
+      </div>
+      <div id="vote-list"></div>
+    </div>
+
+    <!-- 결과 탭 -->
+    <div id="tab-result" class="section">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-count">0</div>
+          <div class="stat-label">제안 수</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-votes">0</div>
+          <div class="stat-label">총 투표 수</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-top">-</div>
+          <div class="stat-label">1위 득표</div>
+        </div>
+      </div>
+      <div class="section-title">순위</div>
+      <div id="result-list"></div>
+
+      <div class="admin-bar">
+        <span class="teacher-status off" id="teacher-status-badge">일반 모드</span>
+        <span class="admin-toggle" onclick="toggleAdmin()">선생님 관리 메뉴</span>
+      </div>
+
+      <div class="admin-panel" id="admin-panel">
+        <h3>선생님 인증</h3>
+        <div class="pw-row">
+          <input type="password" id="pw-input" placeholder="비밀번호 입력 (기본값: 1234)" onkeydown="if(event.key==='Enter')checkPw()" />
+          <button class="pw-btn" onclick="checkPw()">확인</button>
+        </div>
+        <div class="toast error" id="pw-error" style="margin-top:0;margin-bottom:0.5rem;">비밀번호가 틀렸어요.</div>
+        <div class="admin-actions">
+          <button class="admin-btn" onclick="addSample()">샘플 데이터 추가</button>
+          <button class="admin-btn danger" onclick="clearAll()">전체 초기화</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.app -->
+
+  <script>
+    const TEACHER_PW = '1234'; // ← 여기서 비밀번호 변경 가능
+    const MAX_VOTES = 2;
+
+    let mottos = JSON.parse(localStorage.getItem('mottos_v2') || '[]');
+    let voted  = JSON.parse(localStorage.getItem('voted_v2')  || '[]');
+    let isTeacher = false;
+
+    function save() {
+      localStorage.setItem('mottos_v2', JSON.stringify(mottos));
+      localStorage.setItem('voted_v2',  JSON.stringify(voted));
+    }
+
+    function showTab(name) {
+      const names = ['propose', 'vote', 'result'];
+      document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', names[i] === name);
+      });
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      if (name === 'vote')   renderVote();
+      if (name === 'result') renderResult();
+    }
+
+    function updateCharCount(el, id) {
+      document.getElementById(id).textContent = el.value.length;
+    }
+
+    function showToast(id, dur) {
+      const el = document.getElementById(id);
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', dur || 2500);
+    }
+
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    /* ── 제안 ── */
+    function submitMotto() {
+      const name   = document.getElementById('name-input').value.trim();
+      const text   = document.getElementById('motto-input').value.trim();
+      const reason = document.getElementById('reason-input').value.trim();
+      if (!name || !text) { showToast('propose-error'); return; }
+
+      mottos.push({ id: Date.now(), name, text, reason, votes: 0 });
+      save();
+
+      document.getElementById('name-input').value   = '';
+      document.getElementById('motto-input').value  = '';
+      document.getElementById('reason-input').value = '';
+      document.getElementById('motto-count').textContent  = '0';
+      document.getElementById('reason-count').textContent = '0';
+      showToast('propose-toast');
+    }
+
+    /* ── 투표 ── */
+    function remainingVotes() {
+      return MAX_VOTES - voted.length;
+    }
+
+    function renderVote() {
+      const rem   = remainingVotes();
+      const remEl = document.getElementById('vote-remaining');
+      remEl.textContent = rem + '표';
+      remEl.className   = 'vote-remaining' + (rem === 0 ? ' empty' : '');
+
+      const list = document.getElementById('vote-list');
+      if (!mottos.length) {
+        list.innerHTML = '<div class="empty-state">아직 제안된 급훈이 없어요.<br>먼저 급훈을 제안해 보세요!</div>';
+        return;
+      }
+
+      list.innerHTML = mottos.map(m => {
+        const isVoted = voted.includes(m.id);
+        const canVote = isVoted || rem > 0;
+        return `
+          <div class="motto-item">
+            <div class="motto-text-block">
+              <div class="motto-text">${esc(m.text)}</div>
+              ${m.reason ? `<div class="motto-reason">${esc(m.reason)}</div>` : ''}
+            </div>
+            <div class="vote-col">
+              <button
+                class="vote-btn ${isVoted ? 'voted' : ''}"
+                onclick="toggleVote(${m.id})"
+                ${!canVote ? 'disabled' : ''}
+                title="${isVoted ? '투표 취소' : rem === 0 ? '투표 가능 횟수 초과' : '투표하기'}"
+              >${isVoted ? '♥' : '♡'}</button>
+              <span class="vote-count">${m.votes}</span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function toggleVote(id) {
+      const m = mottos.find(x => x.id === id);
+      if (!m) return;
+      if (voted.includes(id)) {
+        m.votes = Math.max(0, m.votes - 1);
+        voted   = voted.filter(v => v !== id);
+      } else {
+        if (remainingVotes() <= 0) return;
+        m.votes++;
+        voted.push(id);
+      }
+      save();
+      renderVote();
+    }
+
+    /* ── 결과 ── */
+    function renderResult() {
+      const sorted     = [...mottos].sort((a, b) => b.votes - a.votes);
+      const totalVotes = mottos.reduce((s, m) => s + m.votes, 0);
+      const maxVotes   = sorted[0]?.votes || 0;
+
+      document.getElementById('stat-count').textContent = mottos.length;
+      document.getElementById('stat-votes').textContent = totalVotes;
+      document.getElementById('stat-top').textContent   = maxVotes > 0 ? maxVotes + '표' : '-';
+
+      const list = document.getElementById('result-list');
+      if (!sorted.length) {
+        list.innerHTML = '<div class="empty-state">아직 제안된 급훈이 없어요.</div>';
+        return;
+      }
+
+      list.innerHTML = sorted.map((m, i) => {
+        const pct       = maxVotes > 0 ? Math.round(m.votes / maxVotes * 100) : 0;
+        const rankClass = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
+        return `
+          <div class="motto-item">
+            <div class="rank-badge ${rankClass}">${i + 1}</div>
+            <div class="motto-text-block">
+              <div class="motto-text">${esc(m.text)}</div>
+              ${m.reason ? `<div class="motto-reason">${esc(m.reason)}</div>` : ''}
+              ${isTeacher ? `<div class="motto-author">제안자: ${esc(m.name)}</div>` : ''}
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" style="width:${pct}%"></div>
+              </div>
+              <div class="motto-number">${m.votes}표 · ${pct}%</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    /* ── 관리자 ── */
+    function toggleAdmin() {
+      document.getElementById('admin-panel').classList.toggle('show');
+      document.getElementById('pw-error').style.display = 'none';
+    }
+
+    function checkPw() {
+      const pw = document.getElementById('pw-input').value;
+      if (pw === TEACHER_PW) {
+        isTeacher = true;
+        document.getElementById('teacher-status-badge').textContent = '선생님 모드';
+        document.getElementById('teacher-status-badge').className   = 'teacher-status on';
+        document.getElementById('pw-error').style.display = 'none';
+        document.getElementById('admin-panel').classList.remove('show');
+        renderResult();
+      } else {
+        document.getElementById('pw-error').style.display = 'block';
+      }
+    }
+
+    function addSample() {
+      const samples = [
+        { name: '김민준', text: '실패를 두려워하지 않는 우리',   reason: '도전 정신이 중요하다고 생각해서요' },
+        { name: '이서연', text: '함께하면 더 빛나는 우리',       reason: '협동이 최고의 힘이에요' },
+        { name: '박지후', text: '오늘보다 더 나은 내일을 향해',  reason: '성장을 강조하고 싶어서' },
+        { name: '최수아', text: '꿈꾸고, 노력하고, 이루자',      reason: '목표를 향해 나아가자는 뜻' },
+        { name: '정하늘', text: '서로 존중하며 함께 성장하자',   reason: '' },
+      ];
+      samples.forEach(s => {
+        mottos.push({
+          id: Date.now() + (Math.random() * 1000 | 0),
+          name: s.name, text: s.text, reason: s.reason,
+          votes: Math.floor(Math.random() * 12)
+        });
+      });
+      save();
+      renderResult();
+    }
+
+    function clearAll() {
+      if (!confirm('모든 데이터를 초기화할까요?')) return;
+      mottos = []; voted = [];
+      save();
+      renderResult();
+      renderVote();
+    }
+
+    /* 초기 렌더 */
+    renderVote();
+    renderResult();
+  </script>
+</body>
+</html>
